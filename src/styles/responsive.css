@@ -1,0 +1,515 @@
+/**
+ * Responsive Design and Media Queries
+ * IoT Water Tank Monitor
+ */
+
+/* Import Variables */
+@import './variables.css';
+
+/* ==========================================
+   MOBILE FIRST APPROACH
+   ========================================== */
+
+/* Base Mobile Styles (up to 640px) */
+@media (max-width: 640px) {
+  /* Typography Adjustments */
+  html {
+    font-size: 14px;
+  }
+  
+  h1 { font-size: var(--font-size-xl); }
+  h2 { font-size: var(--font-size-lg); }
+  h3 { font-size: var(--font-size-base); }
+  
+  /* Layout Adjustments */
+  .header-content {
+    flex-direction: column;
+    gap: var(--spacing-lg);
+  }
+  
+  .dashboard-main {
+    padding: var(--spacing-lg);
+  }
+  
+  .kpi-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .user-info-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.75rem;
+  }
+  
+  .login-card {
+    padding: var(--spacing-2xl);
+  }
+  
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .dashboard-header {
+    padding: 0.75rem var(--spacing-lg);
+  }
+  
+  .system-info-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .mobile-dropdown-content {
+    right: 0.5rem;
+    width: calc(100vw - 1rem);
+  }
+  
+  /* Splash Screen Mobile */
+  .main-title {
+    font-size: var(--font-size-3xl);
+  }
+  
+  .tank-logo {
+    width: 80px;
+    height: 80px;
+  }
+  
+  /* Safe Area for Devices with Notches */
+  .min-h-screen {
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+  }
+}
+
+/* ==========================================
+   TABLET STYLES (641px - 768px)
+   ========================================== */
+@media (min-width: 641px) and (max-width: 768px) {
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .system-info-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ==========================================
+   TABLET AND BELOW (up to 768px)
+   ========================================== */
+@media (max-width: 768px) {
+  /* Touch-friendly Targets */
+  .mobile-touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  .mobile-menu-item {
+    min-height: 48px;
+    padding: 0.75rem var(--spacing-lg);
+  }
+  
+  /* Footer Adjustments */
+  .footer-content {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .footer-status {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  /* Chart Adjustments */
+  .charts-section {
+    grid-template-columns: 1fr;
+  }
+  
+  /* Mobile Header Typography */
+  .mobile-header-title {
+    font-size: 1.125rem;
+    line-height: 1.5;
+  }
+  
+  .mobile-connection-badge {
+    font-size: 0.65rem;
+    padding: 0.125rem 0.375rem;
+  }
+  
+  /* iOS Zoom Prevention */
+  input[type="email"],
+  input[type="password"],
+  input[type="text"],
+  input[type="number"],
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}
+
+/* ==========================================
+   LAPTOP STYLES (769px - 1024px)
+   ========================================== */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .charts-section {
+    grid-template-columns: 1fr;
+  }
+  
+  .system-info-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .dashboard-header {
+    padding: var(--spacing-lg) var(--spacing-2xl);
+  }
+}
+
+/* ==========================================
+   LARGE TABLET AND BELOW (up to 1024px)
+   ========================================== */
+@media (max-width: 1024px) {
+  /* Mobile Header Visibility */
+  .desktop-header {
+    display: none;
+  }
+  
+  .mobile-header {
+    display: flex;
+  }
+  
+  /* Card Grid Adjustments */
+  .grid-cols-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  /* Spacing Adjustments */
+  .dashboard-header {
+    padding: var(--spacing-lg) var(--spacing-2xl);
+  }
+}
+
+/* ==========================================
+   DESKTOP STYLES (1025px and above)
+   ========================================== */
+@media (min-width: 1025px) {
+  .kpi-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  
+  .charts-section {
+    grid-template-columns: 1fr 2fr;
+  }
+  
+  .system-info-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .features-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  /* Desktop Header Visibility */
+  .desktop-header {
+    display: flex;
+  }
+  
+  .mobile-header {
+    display: none;
+  }
+}
+
+/* ==========================================
+   LARGE DESKTOP (1281px and above)
+   ========================================== */
+@media (min-width: 1281px) {
+  .header-content,
+  .dashboard-main,
+  .footer-content {
+    max-width: 1280px;
+  }
+  
+  .charts-section {
+    grid-template-columns: 1fr 2fr;
+  }
+}
+
+/* ==========================================
+   EXTRA LARGE DESKTOP (1536px and above)
+   ========================================== */
+@media (min-width: 1536px) {
+  .header-content,
+  .dashboard-main,
+  .footer-content {
+    max-width: 1400px;
+  }
+  
+  .kpi-grid {
+    gap: var(--spacing-4xl);
+  }
+  
+  .charts-section {
+    gap: var(--spacing-4xl);
+  }
+}
+
+/* ==========================================
+   ORIENTATION SPECIFIC STYLES
+   ========================================== */
+
+/* Landscape Mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+  .splash-screen {
+    padding: var(--spacing-lg);
+  }
+  
+  .splash-content {
+    transform: scale(0.8);
+  }
+  
+  .login-content {
+    padding: var(--spacing-2xl) var(--spacing-lg);
+  }
+  
+  .mobile-dropdown-content {
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+}
+
+/* Portrait Tablet */
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+  .charts-section {
+    grid-template-columns: 1fr;
+  }
+  
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ==========================================
+   TOUCH DEVICE OPTIMIZATIONS
+   ========================================== */
+@media (hover: none) and (pointer: coarse) {
+  /* Enhanced Touch Targets */
+  .mobile-menu-item {
+    padding: var(--spacing-lg);
+  }
+  
+  button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  .header-btn {
+    padding: var(--spacing-lg);
+  }
+  
+  /* Remove Hover Effects on Touch */
+  .kpi-card:hover {
+    transform: none;
+  }
+  
+  .mobile-action-btn:hover {
+    transform: none;
+    background: rgba(59, 130, 246, 0.05);
+  }
+  
+  .hover-scale:hover,
+  .hover-scale-sm:hover,
+  .hover-lift:hover {
+    transform: none;
+  }
+}
+
+/* ==========================================
+   HIGH RESOLUTION DISPLAYS
+   ========================================== */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  /* Enhanced Graphics for Retina */
+  .tank-icon,
+  .header-logo svg,
+  .login-logo svg {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  /* Crisper Borders */
+  .glassmorphism {
+    border-width: 0.5px;
+  }
+  
+  .kpi-card {
+    border-width: 0.5px;
+  }
+}
+
+/* ==========================================
+   PRINT STYLES
+   ========================================== */
+@media print {
+  /* Hide Interactive Elements */
+  .mobile-dropdown,
+  .header-btn,
+  .login-button,
+  .mobile-menu-toggle,
+  .splash-screen {
+    display: none !important;
+  }
+  
+  /* Optimize for Print */
+  .dashboard-main {
+    max-width: none;
+    padding: 0;
+  }
+  
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-lg);
+  }
+  
+  .glassmorphism {
+    background: white;
+    border: 1px solid #ccc;
+    box-shadow: none;
+  }
+  
+  /* Typography for Print */
+  body {
+    font-size: 12pt;
+    line-height: 1.4;
+    color: black;
+  }
+  
+  h1 { font-size: 18pt; }
+  h2 { font-size: 16pt; }
+  h3 { font-size: 14pt; }
+  
+  /* Page Breaks */
+  .kpi-card,
+  .chart-card {
+    page-break-inside: avoid;
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  .charts-section {
+    page-break-before: always;
+  }
+}
+
+/* ==========================================
+   ACCESSIBILITY ENHANCEMENTS
+   ========================================== */
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .glassmorphism {
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid rgba(0, 0, 0, 0.3);
+  }
+  
+  .mobile-dropdown-content {
+    background: rgba(255, 255, 255, 0.98);
+    border: 2px solid rgba(0, 0, 0, 0.2);
+  }
+  
+  .form-input {
+    border: 2px solid var(--color-border-gray);
+  }
+  
+  .form-input:focus {
+    border: 2px solid var(--color-primary-blue);
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .animate-fadeIn,
+  .animate-fadeInUp,
+  .animate-slideInFromTop,
+  .animate-bounce,
+  .animate-float,
+  .animate-pulse,
+  .animate-spin,
+  .animate-glow,
+  .animate-ripple,
+  .animate-dropletFloat,
+  .animate-floatGentle {
+    animation: none;
+  }
+  
+  .transition-all,
+  .transition-colors,
+  .transition-opacity,
+  .transition-transform {
+    transition: none;
+  }
+  
+  /* Static Alternatives for Animations */
+  .tank-logo {
+    animation: none;
+    transform: none;
+  }
+  
+  .ripple-effects {
+    display: none;
+  }
+  
+  .floating-droplets {
+    display: none;
+  }
+}
+
+/* ==========================================
+   SAFE AREA SUPPORT (iPhone X and later)
+   ========================================== */
+@supports (padding-top: env(safe-area-inset-top)) {
+  .dashboard-header {
+    padding-top: max(1.25rem, env(safe-area-inset-top));
+  }
+  
+  .splash-screen {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  
+  .login-content {
+    padding-top: max(var(--spacing-4xl), env(safe-area-inset-top));
+    padding-bottom: max(var(--spacing-4xl), env(safe-area-inset-bottom));
+  }
+  
+  .mobile-dropdown-content {
+    top: max(5rem, calc(5rem + env(safe-area-inset-top)));
+  }
+}
+
+/* ==========================================
+   DARK MODE SUPPORT
+   ========================================== */
+@media (prefers-color-scheme: dark) {
+  .glassmorphism {
+    background: rgba(31, 41, 55, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .form-input {
+    background: rgba(31, 41, 55, 0.7);
+    border-color: rgba(75, 85, 99, 0.8);
+    color: var(--color-text-primary);
+  }
+  
+  .login-card,
+  .admin-credentials-banner {
+    background: rgba(31, 41, 55, 0.9);
+  }
+  
+  .mobile-dropdown-content {
+    background: rgba(31, 41, 55, 0.95);
+  }
+}
