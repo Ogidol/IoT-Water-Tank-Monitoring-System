@@ -136,8 +136,6 @@ npm start
 
 ## 🎨 Infographic Preview
 
-You can add a **GIF or illustration of the dashboard** to make it more visually appealing:
-
 ```markdown
 ![Dashboard Demo](link-to-gif)
 ```
