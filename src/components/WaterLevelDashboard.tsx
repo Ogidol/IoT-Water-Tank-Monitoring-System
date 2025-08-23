@@ -187,60 +187,65 @@ export default function WaterLevelDashboard({
       resolved: boolean;
     }> = [];
 
+    const formatTimestamp = (minutesAgo: number) =>
+      minutesAgo === 0 ? "justnow" : "${minutesAgo} minute(s)";
+
+    const now = new Date();
+
     if (waterData.waterLevel < 20) {
       alerts.push({
-        id: 1,
+        id: Date.now(),
         type: "danger" as const,
         message: `🚨 Critical: Water level at ${waterData.waterLevel}% - immediate attention required`,
-        timestamp: "0 minutes ago",
+        timestamp: formatTimestamp(0),
         resolved: false,
       });
     } else if (waterData.waterLevel < 40) {
       alerts.push({
-        id: 2,
+        id: Date.now() + 1,
         type: "warning" as const,
         message: `⚠️ Warning: Water level low at ${waterData.waterLevel}%`,
-        timestamp: "1 minute ago",
+        timestamp: "forrmatTimestamp(1)",
         resolved: false,
       });
     }
 
     if (waterData.pumpStatus === "OFF" && waterData.waterLevel < 60) {
       alerts.push({
-        id: 3,
+        id: Date.now() + 2,
         type: "warning" as const,
         message: "⚠️ Pump is OFF while water level is below optimal range",
-        timestamp: "2 minutes ago",
+        timestamp: formatTimestamp(2),
         resolved: false,
       });
     }
 
     if (connectionStatus === "error") {
       alerts.push({
-        id: 4,
+        id: Date.now() + 3,
         type: "danger" as const,
         message: "❌ Connection to ESP8266 sensor lost",
-        timestamp: "Just now",
+        timestamp: formatTimestamp(0),
         resolved: false,
       });
     }
 
     if (waterData.batteryLevel && waterData.batteryLevel < 20) {
       alerts.push({
-        id: 5,
+        id: Date.now() + 4,
         type: "warning" as const,
         message: `🔋 Sensor battery low: ${waterData.batteryLevel}%`,
-        timestamp: "5 minutes ago",
+        timestamp: formatTimestamp(5),
         resolved: false,
       });
     }
 
     // Add some resolved alerts for demo
     alerts.push({
-      id: 6,
+      id: Date.now() + 5,
       type: "info" as const,
       message: "✅ Daily sensor calibration completed successfully",
-      timestamp: "30 minutes ago",
+      timestamp: formatTimestamp(30),
       resolved: true,
     });
 
@@ -1673,7 +1678,7 @@ export default function WaterLevelDashboard({
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-600">Last Sync</span>
                     <span className="text-sm font-semibold text-gray-900">
-                      {lastFetchTime.toLocaleTimeString()}
+                      {waterData.lastUpdate}
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
