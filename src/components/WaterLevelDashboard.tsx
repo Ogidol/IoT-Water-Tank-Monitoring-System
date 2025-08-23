@@ -1128,7 +1128,10 @@ export default function WaterLevelDashboard({
                     ? lastFetchTime.getHours() +
                       ":" +
                       lastFetchTime.getMinutes().toString().padStart(2, "0")
-                    : lastFetchTime.toLocaleTimeString()}
+                    : lastFetchTime.toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
                 </span>
               </div>
             </CardContent>
