@@ -188,7 +188,7 @@ export default function WaterLevelDashboard({
     }> = [];
 
     const formatTimestamp = (minutesAgo: number) =>
-      minutesAgo === 0 ? "justnow" : "${minutesAgo} minute(s)";
+      minutesAgo === 0 ? "justnow" : `${minutesAgo} minute(s)`;
 
     const now = new Date();
 
