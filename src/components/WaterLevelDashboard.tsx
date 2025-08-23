@@ -471,11 +471,14 @@ export default function WaterLevelDashboard({
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-cyan-50">
+      <div
+        className="flex items-center justify-center bg-gradient-to-br from-blue-50 to-cyan-50"
+        style={{ minHeight: "100svh", height: "100vh" }}
+      >
         <div className="text-center">
           <div
             className={`${
-              is320 ? "w-12 h-screen" : "w-16 h-16"
+              is320 ? "w-12 h-12" : "w-16 h-16"
             } border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mx-auto mb-4`}
           ></div>
           <h2
