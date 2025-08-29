@@ -72,7 +72,7 @@ C -->|Visualization| E[Charts & Panels]
 
 ```bash
 # Clone repo
-git clone https://github.com/yourusername/water-level-monitor.git
+git clone https://github.com/Ogidol/water-level-monitor.git
 cd water-level-monitor
 
 # Install dependencies
@@ -99,9 +99,9 @@ npm start
 
 ## 🖼 Screenshots
 
-| Desktop Dashboard                      | Mobile View                          |
-| -------------------------------------- | ------------------------------------ |
-| ![Desktop](link-to-desktop-screenshot) | ![Mobile](link-to-mobile-screenshot) |
+| Desktop Dashboard                 | Mobile View                   |
+| --------------------------------- | ----------------------------- |
+| ![Desktop](/assets/Dashboard.png) | ![Mobile](/assets/mobile.png) |
 
 ---
 
