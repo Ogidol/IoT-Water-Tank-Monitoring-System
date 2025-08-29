@@ -1,4 +1,4 @@
-import { useState, React } from "react";
+import { useState } from "react";
 import { Droplets, Mail, Lock, Eye, EyeOff, User } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -9,12 +9,17 @@ interface LoginProps {
   onLogin: () => void;
 }
 
+interface Message {
+  type: "error" | "success";
+  text: string;
+}
+
 export default function Login({ onLogin }: LoginProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState<Message | "">("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -108,38 +113,6 @@ export default function Login({ onLogin }: LoginProps) {
       {/* Main Content - Fixed positioning and padding */}
       <div className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 py-12">
         <div className="w-full max-w-md">
-          {/* User Information Banner - Now with proper spacing */}
-          <div
-            className="mb-8 backdrop-blur-lg rounded-2xl p-6 border border-white/30 text-center animate-fade-in"
-            style={{
-              background: "rgba(255, 255, 255, 0.95)",
-              boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
-            }}
-          >
-            <div className="flex items-center justify-center space-x-4">
-              <div
-                className="w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0"
-                style={{
-                  background: "linear-gradient(135deg, #0891b2, #06b6d4)",
-                  boxShadow: "0 4px 16px rgba(8, 145, 178, 0.3)",
-                }}
-              >
-                <User className="w-8 h-8 text-white" />
-              </div>
-              <div className="text-left flex-1">
-                <div className="text-xl font-bold text-gray-800 mb-1">
-                  Idris Ogundele Olawale
-                </div>
-                <div className="text-sm text-gray-600 font-medium">
-                  Matric No: 222956
-                </div>
-                <div className="text-xs text-gray-500 mt-1">
-                  System Administrator
-                </div>
-              </div>
-            </div>
-          </div>
-
           {/* Login Card */}
           <div
             className="backdrop-blur-lg rounded-3xl p-8 border border-white/30 animate-fade-in"
@@ -297,28 +270,11 @@ export default function Login({ onLogin }: LoginProps) {
               </div>
             </div>
           </div>
-
-          {/* Footer Credit */}
-          <div
-            className="mt-8 text-center animate-fade-in"
-            style={{ animationDelay: "0.4s", animationFillMode: "both" }}
-          >
-            <p
-              className="text-white/90 text-sm backdrop-blur-sm rounded-full px-6 py-3 inline-block border border-white/20 font-medium"
-              style={{
-                background: "rgba(255, 255, 255, 0.1)",
-                textShadow: "0 1px 3px rgba(0, 0, 0, 0.3)",
-              }}
-            >
-              © 2025 IoT Water Tank Monitor • Designed by{" "}
-              <span className="font-bold">Idris Olawale</span>
-            </p>
-          </div>
         </div>
       </div>
 
       {/* Custom CSS for animations */}
-      <style jsx="true">{`
+      <style>{`
         @keyframes fade-in {
           from {
             opacity: 0;

@@ -319,7 +319,7 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
       </div>
 
       {/* Custom CSS for all animations */}
-      <style jsx="true">{`
+      <style>{`
         @keyframes fade-in {
           from {
             opacity: 0;

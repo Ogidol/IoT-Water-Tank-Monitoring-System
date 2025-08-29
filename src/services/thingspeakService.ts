@@ -308,7 +308,7 @@ class ThingSpeakService {
     const waterLevel = entry.field1 ? Math.round(parseFloat(entry.field1)) : 0;
     const temperature = entry.field2 ? parseFloat(entry.field2) : undefined;
     const distance = entry.field3 ? parseFloat(entry.field3) : undefined;
-    const tankCapacity = entry.field4 ? parseFloat(entry.field4) : 1000;
+    const tankCapacity = entry.field4 ? parseFloat(entry.field4) : 10000;
     const pumpStatus = entry.field5
       ? ((entry.field5.toLowerCase() === "on" ? "ON" : "OFF") as "ON" | "OFF")
       : "OFF";
@@ -355,7 +355,7 @@ class ThingSpeakService {
   private getFallbackData(): WaterLevelData {
     return {
       waterLevel: 0,
-      tankCapacity: 1000,
+      tankCapacity: 10000,
       pumpStatus: "OFF",
       timestamp: new Date().toISOString(),
       lastUpdate: "Connection Error",
@@ -481,7 +481,7 @@ class ThingSpeakService {
       waterLevel,
       temperature,
       distance,
-      tankCapacity: 1000,
+      tankCapacity: 10000,
       pumpStatus: waterLevel < 50 ? "ON" : "OFF",
       batteryLevel: Math.floor(Math.random() * 30) + 70, // 70-100%
       wifiSignal: Math.floor(Math.random() * 30) + 70, // 70-100%

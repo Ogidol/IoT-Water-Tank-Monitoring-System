@@ -45,7 +45,7 @@ export default function WaterLevelDashboard({
   // Real-time data states
   const [waterData, setWaterData] = useState<WaterLevelData>({
     waterLevel: 0,
-    tankCapacity: 1000,
+    tankCapacity: 10000,
     pumpStatus: "OFF",
     timestamp: new Date().toISOString(),
     lastUpdate: "Loading...",
@@ -205,7 +205,7 @@ export default function WaterLevelDashboard({
         id: Date.now() + 1,
         type: "warning" as const,
         message: `⚠️ Warning: Water level low at ${waterData.waterLevel}%`,
-        timestamp: "forrmatTimestamp(1)",
+        timestamp: formatTimestamp(1),
         resolved: false,
       });
     }
@@ -787,8 +787,8 @@ export default function WaterLevelDashboard({
                       background: "rgba(255, 255, 255, 0.95)",
                       boxShadow:
                         "0 25px 60px rgba(0, 0, 0, 0.15), 0 0 40px rgba(8, 145, 178, 0.2)",
-                      right: is320 ? "0" : "auto",
-                      left: "30%",
+                      width: is320 ? "90%" : "250px",
+                      right: "0",
                       margin: is320 ? "0 0.5rem" : "0",
                       transform: "translateX(-30%)",
                     }}
