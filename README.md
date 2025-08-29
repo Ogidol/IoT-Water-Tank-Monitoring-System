@@ -6,7 +6,8 @@
 
 ## 🌊 Project Overview
 
-> Real-time **water level monitoring** app for tanks using **ESP8266 sensors** and **React dashboard**.
+> This project is my **Final Year Project (FYP)** focused on solving the challenge of **real-time water level monitoring** using **IoT technology**.  
+> It helps prevent water overflow, manage water resources efficiently, and send alerts when the water level is low.
 
 📌 **Purpose:**
 
