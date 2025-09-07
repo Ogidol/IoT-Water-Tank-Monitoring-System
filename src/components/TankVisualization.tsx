@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Droplets, Wifi, WifiOff, Zap } from "lucide-react";
 
 interface TankVisualizationProps {
@@ -83,9 +83,19 @@ export default function TankVisualization({
   const { width: tankWidth, height: tankHeight } = dimensions[size];
 
   // Calculate water height based on percentage
-  const margin = 35; // px top margin
-  const waterHeight = margin + (waterLevel / 100) * (tankHeight - 2 * margin);
-  const currentVolume = Math.round(tankCapacity * (waterLevel / 100));
+  // Margin for tank top/bottom spacing (optional, just for visuals)
+  const topMargin = 20; // space at the top of the tank
+  const bottomMargin = 10; // space at the bottom of the tank
+
+  // Calculate the actual water height based on percentage
+  const waterHeight =
+    (waterLevel / 100) * (tankHeight - topMargin - bottomMargin);
+
+  // Position from bottom of the tank container
+  const waterBottomPosition = bottomMargin; // starts from bottomMargin
+
+  // Current volume in liters
+  const currentVolume = Math.round((tankCapacity * waterLevel) / 100);
 
   // Dynamic water color based on level
   const getWaterColor = (level: number) => {
@@ -200,6 +210,7 @@ export default function TankVisualization({
             className="absolute bottom-4 left-4 right-4 rounded-xl overflow-hidden"
             style={{
               height: Math.max(waterHeight, 0),
+              bottom: waterBottomPosition,
               transform: "translateZ(10px)",
               transformStyle: "preserve-3d",
             }}
