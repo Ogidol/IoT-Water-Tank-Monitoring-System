@@ -1359,7 +1359,7 @@ export default function WaterLevelDashboard({
             </CardContent>
           </Card>
 
-          {/* Additional Sensor Data Card */}
+          {/* Smart Pump Status Card */}
           <Card
             className={`glassmorphism shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 border-white/30 ${
               is320 ? "p-2" : ""
@@ -1375,115 +1375,87 @@ export default function WaterLevelDashboard({
                   is320 ? "text-xs" : "text-sm"
                 } font-semibold text-gray-700`}
               >
-                Sensor Data
+                Smart Pump
               </CardTitle>
               <div
                 className={`${is320 ? "p-2" : "p-3"} rounded-xl shadow-lg`}
                 style={{
-                  background: "linear-gradient(135deg, #8B5CF6, #A78BFA)",
-                  boxShadow: "0 6px 16px rgba(139, 92, 246, 0.3)",
+                  background:
+                    pumpStatus === "ON"
+                      ? "linear-gradient(135deg, #10B981, #34D399)"
+                      : "linear-gradient(135deg, #6B7280, #9CA3AF)",
+                  boxShadow:
+                    pumpStatus === "ON"
+                      ? "0 6px 16px rgba(16, 185, 129, 0.3)"
+                      : "0 6px 16px rgba(107, 114, 128, 0.3)",
                 }}
               >
-                <Clock
-                  className={`${is320 ? "h-3 w-3" : "h-5 w-5"} text-white`}
+                <Zap
+                  className={`${is320 ? "h-3 w-3" : "h-5 w-5"} text-white ${
+                    pumpStatus === "ON" ? "animate-pulse" : ""
+                  }`}
                 />
               </div>
             </CardHeader>
             <CardContent className={is320 ? "p-2" : ""}>
-              <div className={`${is320 ? "space-y-1" : "space-y-2"}`}>
-                {waterData.temperature && (
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                      <Thermometer
-                        className={`${
-                          is320 ? "w-3 h-3" : "w-4 h-4"
-                        } mr-2 text-orange-500`}
-                      />
-                      <span
-                        className={`${
-                          is320 ? "text-xs" : "text-sm"
-                        } text-gray-600`}
-                      >
-                        Temp
-                      </span>
-                    </div>
-                    <span
-                      className={`${
-                        is320 ? "text-xs" : "text-sm"
-                      } font-semibold text-gray-900`}
-                    >
-                      {waterData.temperature}°C
-                    </span>
-                  </div>
-                )}
-                {waterData.distance && (
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                      <Activity
-                        className={`${
-                          is320 ? "w-3 h-3" : "w-4 h-4"
-                        } mr-2 text-blue-500`}
-                      />
-                      <span
-                        className={`${
-                          is320 ? "text-xs" : "text-sm"
-                        } text-gray-600`}
-                      >
-                        Distance
-                      </span>
-                    </div>
-                    <span
-                      className={`${
-                        is320 ? "text-xs" : "text-sm"
-                      } font-semibold text-gray-900`}
-                    >
-                      {waterData.distance}cm
-                    </span>
-                  </div>
-                )}
-                {waterData.batteryLevel && (
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                      <Battery
-                        className={`${
-                          is320 ? "w-3 h-3" : "w-4 h-4"
-                        } mr-2 text-green-500`}
-                      />
-                      <span
-                        className={`${
-                          is320 ? "text-xs" : "text-sm"
-                        } text-gray-600`}
-                      >
-                        Battery
-                      </span>
-                    </div>
-                    <span
-                      className={`${
-                        is320 ? "text-xs" : "text-sm"
-                      } font-semibold text-gray-900`}
-                    >
-                      {waterData.batteryLevel}%
-                    </span>
-                  </div>
-                )}
-                <div
-                  className={`flex items-center justify-between ${
-                    is320 ? "pt-1" : "pt-2"
-                  } border-t border-gray-200`}
+              <div
+                className={`${is320 ? "text-xl" : "text-3xl"} font-bold ${
+                  pumpStatus === "ON" ? "text-green-600" : "text-gray-600"
+                } ${is320 ? "mb-2" : "mb-3"}`}
+              >
+                {pumpStatus}
+              </div>
+              <div
+                className={`flex items-center ${
+                  is320 ? "space-x-2 mb-2" : "space-x-3 mb-3"
+                }`}
+              >
+                <Badge
+                  variant={pumpStatus === "ON" ? "default" : "outline"}
+                  className={`${
+                    pumpStatus === "ON"
+                      ? "bg-green-100 text-green-800 shadow-sm font-semibold animate-pulse"
+                      : "bg-gray-100 text-gray-600 shadow-sm font-semibold"
+                  } ${is320 ? "px-2 py-0 text-xs" : "px-3 py-1"}`}
                 >
-                  <span
-                    className={`${is320 ? "text-xs" : "text-xs"} text-gray-500`}
-                  >
-                    Live Updates
-                  </span>
-                  <span
-                    className={`${
-                      is320 ? "text-xs" : "text-xs"
-                    } font-medium text-green-600 animate-pulse`}
-                  >
-                    Every 3s
-                  </span>
-                </div>
+                  {pumpStatus === "ON" ? "ACTIVE" : "STANDBY"}
+                </Badge>
+                <div
+                  className={`${is320 ? "w-2 h-2" : "w-3 h-3"} rounded-full ${
+                    pumpStatus === "ON"
+                      ? "bg-green-500 animate-pulse shadow-green-300"
+                      : "bg-gray-400"
+                  } shadow-lg`}
+                ></div>
+              </div>
+              <p
+                className={`${
+                  is320 ? "text-xs" : "text-sm"
+                } text-gray-600 mb-1`}
+              >
+                {pumpStatus === "ON"
+                  ? "Auto-activated by trend"
+                  : "Smart monitoring"}
+              </p>
+              <div
+                className={`flex items-center justify-between ${
+                  is320 ? "pt-1" : "pt-2"
+                } border-t border-gray-200`}
+              >
+                <span
+                  className={`${is320 ? "text-xs" : "text-xs"} text-gray-500`}
+                >
+                  AI Logic
+                </span>
+                <span
+                  className={`${
+                    is320 ? "text-xs" : "text-xs"
+                  } font-medium text-blue-600`}
+                >
+                  {waterLevelHistory.length > 3
+                    ? "Trend Analysis"
+                    : "Learning..."}
+                </span>
               </div>
             </CardContent>
           </Card>
