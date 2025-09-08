@@ -29,6 +29,14 @@ import thingSpeakService, {
   HistoricalData,
 } from "../services/thingspeakService";
 
+type Alert = {
+  id: number;
+  type: "danger" | "warning" | "info";
+  message: string;
+  timestamp: string;
+  resolved: boolean;
+};
+
 interface WaterLevelDashboardProps {
   onLogout: () => void;
 }
@@ -58,6 +66,9 @@ export default function WaterLevelDashboard({
     "connected" | "disconnected" | "error"
   >("disconnected");
   const [lastFetchTime, setLastFetchTime] = useState<Date>(new Date());
+  // Smart pump status tracking
+  const [waterLevelHistory, setWaterLevelHistory] = useState<number[]>([]);
+  const [pumpStatus, setPumpStatus] = useState<"ON" | "OFF">("OFF");
 
   // UPDATED: Auto-refresh interval changed to 3 seconds for real-time monitoring
   const REFRESH_INTERVAL = 3000; // Changed from 30000 (30s) to 3000 (3s)
@@ -86,6 +97,33 @@ export default function WaterLevelDashboard({
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isMobileMenuOpen]);
+  // Smart pump status logic based on water level trends
+  const determinePumpStatus = useCallback(
+    (currentLevel: number, levelHistory: number[]): "ON" | "OFF" => {
+      if (levelHistory.length < 3) return "OFF"; // Need at least 3 readings for trend analysis
+
+      const recentReadings = levelHistory.slice(-5); // Use last 5 readings for trend
+      const averageChange =
+        recentReadings.reduce((acc, level, index) => {
+          if (index === 0) return acc;
+          return acc + (level - recentReadings[index - 1]);
+        }, 0) /
+        (recentReadings.length - 1);
+
+      // Determine pump status based on trend
+      if (averageChange > 0.5) {
+        // Water level is increasing significantly - pump should be ON
+        return "ON";
+      } else if (averageChange < -0.2) {
+        // Water level is decreasing - pump should be OFF
+        return "OFF";
+      } else {
+        // Level is relatively stable - keep current status or turn OFF if level is adequate
+        return currentLevel > 60 ? "OFF" : "ON";
+      }
+    },
+    []
+  );
 
   // Close mobile menu on escape key
   useEffect(() => {
@@ -100,30 +138,59 @@ export default function WaterLevelDashboard({
   }, [isMobileMenuOpen]);
 
   // Fetch current water level data
-  const fetchCurrentData = useCallback(async (showRefreshing = false) => {
-    try {
-      if (showRefreshing) setIsRefreshing(true);
+  const fetchCurrentData = useCallback(
+    async (showRefreshing = false) => {
+      try {
+        if (showRefreshing) setIsRefreshing(true);
 
-      const data = await thingSpeakService.getCurrentWaterLevel();
-      setWaterData(data);
-      setConnectionStatus(
-        data.lastUpdate === "Connection Error" ? "error" : "connected"
-      );
-      setLastFetchTime(new Date());
+        const data = await thingSpeakService.getCurrentWaterLevel();
 
-      // Log real-time updates for debugging
-      console.log(`🔄 Real-time update (${new Date().toLocaleTimeString()}):`, {
-        waterLevel: data.waterLevel,
-        pumpStatus: data.pumpStatus,
-        lastUpdate: data.lastUpdate,
-      });
-    } catch (error) {
-      console.error("Error fetching current data:", error);
-      setConnectionStatus("error");
-    } finally {
-      if (showRefreshing) setIsRefreshing(false);
-    }
-  }, []);
+        // Update water level history for pump logic
+        setWaterLevelHistory((prev) => {
+          const newHistory = [...prev, data.waterLevel].slice(-10); // Keep last 10 readings
+
+          // Determine smart pump status
+          const smartPumpStatus = determinePumpStatus(
+            data.waterLevel,
+            newHistory
+          );
+          setPumpStatus(smartPumpStatus);
+
+          // Update data with smart pump status
+          const updatedData = { ...data, pumpStatus: smartPumpStatus };
+          setWaterData(updatedData);
+
+          console.log(
+            `🔄 Smart Pump Logic (${new Date().toLocaleTimeString()}):`,
+            {
+              waterLevel: data.waterLevel,
+              trend:
+                newHistory.length > 1
+                  ? (
+                      data.waterLevel - newHistory[newHistory.length - 2]
+                    ).toFixed(2)
+                  : "0",
+              pumpStatus: smartPumpStatus,
+              history: newHistory.slice(-5),
+            }
+          );
+
+          return newHistory;
+        });
+
+        setConnectionStatus(
+          data.lastUpdate === "Connection Error" ? "error" : "connected"
+        );
+        setLastFetchTime(new Date());
+      } catch (error) {
+        console.error("Error fetching current data:", error);
+        setConnectionStatus("error");
+      } finally {
+        if (showRefreshing) setIsRefreshing(false);
+      }
+    },
+    [determinePumpStatus]
+  );
 
   // Fetch historical data for charts
   const fetchHistoricalData = useCallback(async () => {
@@ -178,74 +245,87 @@ export default function WaterLevelDashboard({
   };
 
   // Generate alerts based on real data
-  const generateAlerts = () => {
-    const alerts: Array<{
-      id: number;
-      type: "info" | "warning" | "danger";
-      message: string;
-      timestamp: string;
-      resolved: boolean;
-    }> = [];
-
-    const formatTimestamp = (minutesAgo: number) =>
-      minutesAgo === 0 ? "justnow" : `${minutesAgo} minute(s)`;
-
-    const now = new Date();
+  const generateAlerts = (): Alert[] => {
+    const alerts: Alert[] = [];
 
     if (waterData.waterLevel < 20) {
       alerts.push({
-        id: Date.now(),
+        id: 1,
         type: "danger" as const,
         message: `🚨 Critical: Water level at ${waterData.waterLevel}% - immediate attention required`,
-        timestamp: formatTimestamp(0),
+        timestamp: "0 minutes ago",
         resolved: false,
       });
     } else if (waterData.waterLevel < 40) {
       alerts.push({
-        id: Date.now() + 1,
+        id: 2,
         type: "warning" as const,
         message: `⚠️ Warning: Water level low at ${waterData.waterLevel}%`,
-        timestamp: formatTimestamp(1),
+        timestamp: "1 minute ago",
         resolved: false,
       });
     }
 
-    if (waterData.pumpStatus === "OFF" && waterData.waterLevel < 60) {
+    if (pumpStatus === "OFF" && waterData.waterLevel < 60) {
       alerts.push({
-        id: Date.now() + 2,
+        id: 3,
         type: "warning" as const,
-        message: "⚠️ Pump is OFF while water level is below optimal range",
-        timestamp: formatTimestamp(2),
+        message:
+          "⚠️ Smart pump is OFF while water level is below optimal range",
+        timestamp: "2 minutes ago",
         resolved: false,
       });
+    }
+
+    // Add pump trend alerts
+    if (pumpStatus === "ON" && waterLevelHistory.length > 3) {
+      const recentTrend = waterLevelHistory.slice(-3);
+      const avgChange =
+        recentTrend.reduce((acc, level, index) => {
+          if (index === 0) return acc;
+          return acc + (level - recentTrend[index - 1]);
+        }, 0) /
+        (recentTrend.length - 1);
+
+      if (avgChange > 0.5) {
+        alerts.push({
+          id: 7,
+          type: "info" as const,
+          message: `✅ Smart pump activated - water level increasing (${avgChange.toFixed(
+            1
+          )}%/cycle)`,
+          timestamp: "Just now",
+          resolved: true,
+        });
+      }
     }
 
     if (connectionStatus === "error") {
       alerts.push({
-        id: Date.now() + 3,
+        id: 4,
         type: "danger" as const,
         message: "❌ Connection to ESP8266 sensor lost",
-        timestamp: formatTimestamp(0),
+        timestamp: "Just now",
         resolved: false,
       });
     }
 
     if (waterData.batteryLevel && waterData.batteryLevel < 20) {
       alerts.push({
-        id: Date.now() + 4,
+        id: 5,
         type: "warning" as const,
         message: `🔋 Sensor battery low: ${waterData.batteryLevel}%`,
-        timestamp: formatTimestamp(5),
+        timestamp: "5 minutes ago",
         resolved: false,
       });
     }
 
     // Add some resolved alerts for demo
     alerts.push({
-      id: Date.now() + 5,
+      id: 6,
       type: "info" as const,
       message: "✅ Daily sensor calibration completed successfully",
-      timestamp: formatTimestamp(30),
+      timestamp: "30 minutes ago",
       resolved: true,
     });
 
